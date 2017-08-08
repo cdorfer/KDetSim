@@ -1,0 +1,28 @@
+{
+ gStyle->SetCanvasPreferGL(kTRUE);
+
+  K3D *det=new K3D(5,100,50,120);
+  det->Voltage=200;
+  det->SetUpVolume(1,1);
+  det->SetUpColumn(0,0,0,5,75,2,1);
+  det->SetUpColumn(1,100,0,5,75,2,1);
+  det->SetUpColumn(2,0,50,5,75,2,1);
+  det->SetUpColumn(3,100,50,5,75,2,1);
+  det->SetUpColumn(4,55,25,5,-75,16385,1);
+  det->SetUpElectrodes();
+  det->SetBoundaryConditions();
+
+  TF3 *f2=new TF3("f2","x[0]*x[1]*x[2]*0+[0]",0,3000,0,3000,0,3000);
+   f2->SetParameter(0,-2);
+   det->NeffF=f2;
+
+   det->CalField(0);
+     det->CalField(1);
+
+   det->enp[0]=30;
+   det->enp[1]=30;
+   det->enp[2]=50;
+   det->exp[0]=30;
+   det->exp[1]=30;
+   det->exp[2]=10;
+}

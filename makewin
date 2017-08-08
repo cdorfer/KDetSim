@@ -1,0 +1,153 @@
+ObjSuf        = obj
+LibSuf 	      = lib
+SrcSuf        = cxx
+ExeSuf        = exe
+DllSuf        = dll
+IncSuf        = h
+OutPutOpt     = /out:
+ 
+SISDET        = C:\KDetSim
+OBJDIR        = $(SISDET)\obj
+SRCDIR        = $(SISDET)\src
+INCDIR        = $(SISDET)\inc
+LIBDIR        = $(SISDET)\lib
+EXEDIR        = $(SISDET)\exe
+
+# Win32 system with Microsoft Visual C/C++
+!include <win32.mak>
+CC            = $(cc)
+CXX           = $(cc)
+
+#VC 9.0
+CXXFLAGS      =  /DLL /MD  /EHsc /Ox /D "MSVC" /D "WIN32" -I$(ROOTSYS)/include -I$(INCDIR)
+
+#VC 6.0
+#CXXFLAGS      = $(cvarsdll) -GX -GR /TP /Zl /O2 /G6 /Ze /MD -D_WINDOWS -I$(ROOTSYS)/include -I$(INCDIR)
+LD            = $(link)
+LDFLAGS       = $(conlflags)  /NODEFAULTLIB:LIBCMT  
+SOFLAGS       = $(dlllflags)
+ROOTLIBS      = $(ROOTSYS)/lib/*.lib
+#VC 6.0
+#LIBS          = $(ROOTLIBS) $(guilibsdll) $(LIBDIR)\nrutil.lib MSVCIRT.LIB
+LIBS          = $(ROOTLIBS) $(guilibsdll) $(LIBDIR)\nrutil.lib  MSVCPRT.LIB
+LIBSALL       = $(ROOTLIBS)
+
+
+
+#------------------------------------------------------------------------------
+SISIDELIB    = $(LIBDIR)\KDetSim.$(LibSuf) 
+SISIDEDLL    = $(LIBDIR)\KDetSim.$(DllSuf) 
+SISIDEO      = $(OBJDIR)\KDetSimDict.$(ObjSuf) 
+SISIDES      = $(SRCDIR)\KDetSimDict.$(SrcSuf) 
+SISIDEH      = $(INCDIR)\KDetSimDict.$(IncSuf) 
+
+DIODAO       = $(OBJDIR)\KPad.$(ObjSuf)
+DIODAS       = $(SRCDIR)\KPad.$(SrcSuf)
+DIODAH       = $(INCDIR)\KPad.$(IncSuf)
+
+3DXYO       = $(OBJDIR)\K3D.$(ObjSuf) 
+3DXYS       = $(SRCDIR)\K3D.$(SrcSuf)
+3DXYH       = $(INCDIR)\K3D.$(IncSuf)
+
+3DPIO       = $(OBJDIR)\KPixel.$(ObjSuf) 
+3DPIS       = $(SRCDIR)\KPixel.$(SrcSuf)
+3DPIH       = $(INCDIR)\KPixel.$(IncSuf)
+
+DSTRUCTO     = $(OBJDIR)\KStruct.$(ObjSuf)
+DSTRUCTS     = $(SRCDIR)\KStruct.$(SrcSuf)
+DSTRUCTH     = $(INCDIR)\KStruct.$(IncSuf)
+
+DETECTORO     = $(OBJDIR)\KDetector.$(ObjSuf) 
+DETECTORS     = $(SRCDIR)\KDetector.$(SrcSuf) 
+DETECTORH     = $(INCDIR)\KDetector.$(IncSuf) 
+
+KFIELDO     = $(OBJDIR)\KField.$(ObjSuf) 
+KFIELDS     = $(SRCDIR)\KField.$(SrcSuf) 
+KFIELDH     = $(INCDIR)\KField.$(IncSuf) 
+
+KMATERIALO     = $(OBJDIR)\KMaterial.$(ObjSuf) 
+KMATERIALS     = $(SRCDIR)\KMaterial.$(SrcSuf) 
+KMATERIALH     = $(INCDIR)\KMaterial.$(IncSuf) 
+
+KGEOMETRYO     = $(OBJDIR)\KGeometry.$(ObjSuf) 
+KGEOMETRYS     = $(SRCDIR)\KGeometry.$(SrcSuf) 
+KGEOMETRYH     = $(INCDIR)\KGeometry.$(IncSuf) 
+
+SDETO     = $(OBJDIR)\KStrip.$(ObjSuf) 
+SDETS     = $(SRCDIR)\KStrip.$(SrcSuf) 
+SDETH     = $(INCDIR)\KStrip.$(IncSuf) 
+
+KMESHO      = $(OBJDIR)\KMesh.$(ObjSuf)
+KMESHS      = $(SRCDIR)\KMesh.$(SrcSuf) 
+KMESHH      = $(INCDIR)\KMesh.$(IncSuf) 
+
+SIDEFEDLL  = $(LIBDIR)\SiDeFe.$(DllSuf)
+SIDEFELIB  = $(LIBDIR)\SiDeFe.$(LibSuf)
+SIDEFEO    = $(OBJDIR)\SiDeFeDict.$(ObjSuf)
+SIDEFES    = $(SRCDIR)\SiDeFeDict.$(SrcSuf)
+SIDEFEH    = $(INCDIR)\SiDeFeDict.$(IncSuf)
+
+OBJS          = $(DIODAO) $(3DXYO) $(3DPIO) $(DSTRUCTO) $(DETECTORO) $(KFIELDO) $(KGEOMETRYO) $(KMATERIALO) $(SDETO) $(KMESHO) $(SISIDEO)
+SRCS          = $(DIODAS) $(3DXYS) $(3DPIS) $(DSTRUCTS) $(DETECTORS) $(KFIELDS) $(KGEOMETRYS) $(KMATERIALS) $(SDETS) $(KMESHS)   
+INCS          = $(DIODAH) $(3DXYH) $(3DPIH) $(DSTRUCTH) $(DETECTORH) $(KFIELDH) $(KGEOMETRYH) $(KMATERIALH) $(SDETH) $(KMESHH)  
+
+all:       KDetSim
+
+KDetSim:  $(OBJS) $(SRCS)
+		$(LD) -lib $(LDFLAGS) $(OBJS) $(OutPutOpt)$(SISIDELIB) 
+                $(LD) /DLL $(LDFLAGS) $(OBJS) $(OutPutOpt)$(SISIDEDLL) $(ROOTLIBS) $(LIBS)
+
+
+
+clean:     
+           del /F /Q $(OBJDIR)\*
+	   del /F /Q $(SRCDIR)\*Dict.cxx
+	   del /F /Q $(INCDIR)\*Dict.h
+	   del /F /Q  *~
+
+################# SISIDE CLASSES #################################
+
+$(DIODAO): $(DIODAH) $(DIODAS)
+	 $(CXX) $(CXXFLAGS) $(CXXDEBUG) -c $(DIODAS) /Fo$(DIODAO)
+
+$(3DXYO): $(3DXYH) $(3DXYS)
+	 $(CXX) $(CXXFLAGS) $(CXXDEBUG) -c $(3DXYS) /Fo$(3DXYO)
+
+$(3DPIO): $(3DXYH) $(3DPIS)
+	 $(CXX) $(CXXFLAGS) $(CXXDEBUG) -c $(3DPIS) /Fo$(3DPIO)
+
+$(DSTRUCTO): $(DSTRUCTH) $(DSTRUCTS)
+	 $(CXX) $(CXXFLAGS) $(CXXDEBUG) -c $(DSTRUCTS) /Fo$(DSTRUCTO)
+
+$(DETECTORO): $(DETECTORH) $(DETECTORS)
+	 $(CXX) $(CXXFLAGS) $(CXXDEBUG) -c $(DETECTORS) /Fo$(DETECTORO)
+
+$(KGEOMETRYO): $(KGEOMETRYH) $(KGEOMETRYS)
+	 $(CXX) $(CXXFLAGS) $(CXXDEBUG) -c $(KGEOMETRYS) /Fo$(KGEOMETRYO)
+
+$(KMATERIALO): $(KMATERIALH) $(KMATERIALS)
+	 $(CXX) $(CXXFLAGS) $(CXXDEBUG) -c $(KMATERIALS) /Fo$(KMATERIALO)
+
+$(KFIELDO): $(KFIELDH) $(KFIELDS)
+	 $(CXX) $(CXXFLAGS) $(CXXDEBUG) -c $(KFIELDS) /Fo$(KFIELDO)
+
+$(SDETO): $(SDETH) $(SDETS)
+	 $(CXX) $(CXXFLAGS) $(CXXDEBUG) -c $(SDETS) /Fo$(SDETO)
+
+$(KMESHO): $(KMESHH) $(KMESHS)
+	 $(CXX) $(CXXFLAGS) $(CXXDEBUG) -c $(KMESHS) /Fo$(KMESHO)
+
+$(SISIDEO): $(SISIDEH) $(SISIDES)
+	 $(CXX) $(CXXFLAGS) $(CXXDEBUG) -c $(SISIDES) /Fo$(SISIDEO)
+
+
+$(SISIDEH): $(INCS) $(INCDIR)\KDetSim_LinkDef.h
+        @echo "Generating dictionary for KDetSimt Library...$(SISDET)"
+	$(ROOTSYS)\bin\rootcint -f KDetSimDict.cxx -c $(INCS) $(INCDIR)\KDetSim_LinkDef.h
+	@type KDetSimDict.cxx | find /V "using namespace std" > CKDetSimDict.cxx
+	@copy KDetSimDict.h $(SISIDEH)
+	@copy CKDetSimDict.cxx $(SISIDES)
+	@del KDetSimDict.h 
+	@del CKDetSimDict.cxx KDetSimDict.cxx 
+
+
