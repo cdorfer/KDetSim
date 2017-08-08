@@ -11,7 +11,7 @@ INCROOT         =$(shell root-config --incdir)
 CFLAGS  = -Dextname -I/usr/local/include 
 
 CPPFLAGS        =-I /c/cern/rootcyg/include -I $(INCROOT)/ -I $(INCDIR)/
-CXXFLAGS        =-fPIC -g -O
+CXXFLAGS        =-fPIC -g -O -std=c++11
 MKDEPFLAGS      =-Y ${INCL} -m -w 110
 
 ###############################################################################
